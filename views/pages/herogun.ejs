@@ -1,0 +1,45 @@
+<div class="container">
+  <h1>List of Guns and Heroes</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Power</th>
+        <th>Age</th>
+        <th>Secret Identity</th>
+        <th>Guns</th>
+      </tr>
+    </thead>
+    <tbody id="heroes-list"></tbody>
+  </table>
+</div>
+
+<script>
+  fetch('/heroesandguns')
+    .then(response => response.json())
+    .then(data => {
+      const heroesList = document.getElementById('heroes-list');
+      data.forEach(hero => {
+        const row = document.createElement('tr');
+        let guns = ''; // Inicializa a variável para armazenar os nomes das armas
+
+        // Verifica se o herói possui armas associadas
+        if (hero.guns && hero.guns.length > 0) {
+          guns = hero.guns.map(gun => gun.name).join(', '); // Obtém os nomes das armas do herói
+        }
+
+        row.innerHTML = `
+          <td>${hero.id}</td>
+          <td>${hero.name}</td>
+          <td>${hero.power}</td>
+          <td>${hero.age}</td>
+          <td>${hero.secretIdentity}</td>
+          <td>${guns}</td>
+        `;
+
+        heroesList.appendChild(row);
+      });
+    })
+    .catch(error => console.error('Error fetching heroes:', error));
+</script>

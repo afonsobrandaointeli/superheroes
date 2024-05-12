@@ -1,0 +1,35 @@
+<div class="container">
+  <h1>List of Heroes</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Power</th>
+        <th>Age</th>
+        <th>Secret Identity</th>
+      </tr>
+    </thead>
+    <tbody id="heroes-list"></tbody>
+  </table>
+</div>
+
+<script>
+  fetch('/heroes')
+    .then(response => response.json())
+    .then(data => {
+      const heroesList = document.getElementById('heroes-list');
+      data.forEach(hero => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+                        <td>${hero.id}</td>
+                        <td>${hero.name}</td>
+                        <td>${hero.power}</td>
+                        <td>${hero.age}</td>
+                        <td>${hero.secretIdentity}</td>
+                    `;
+        heroesList.appendChild(row);
+      });
+    })
+    .catch(error => console.error('Error fetching heroes:', error));
+</script>

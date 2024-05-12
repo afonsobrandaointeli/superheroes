@@ -1,0 +1,67 @@
+<div class="container">
+  <h1>Add New Gun</h1>
+  <form id="add-gun-form">
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+    <div class="form-group">
+      <label for="type">Type:</label>
+      <input type="text" class="form-control" id="type" name="type" required>
+    </div>
+    <div class="form-group">
+      <label for="owner">Owner:</label>
+      <select class="form-control" id="owner" name="owner" required>
+        <!-- Opções de heróis serão adicionadas aqui dinamicamente -->
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+<script>
+  // Faz uma solicitação GET para obter os heróis disponíveis
+  fetch('/heroes')
+    .then(response => response.json())
+    .then(data => {
+      // Para cada herói na resposta, adiciona uma opção à caixa de seleção de proprietários
+      const ownerSelect = document.getElementById('owner');
+      data.forEach(hero => {
+        const option = document.createElement('option');
+        option.value = hero.id;
+        option.textContent = hero.name;
+        ownerSelect.appendChild(option);
+      });
+    })
+    .catch(error => console.error('Error fetching heroes:', error));
+
+  // Adiciona um evento de envio ao formulário
+  document.getElementById('add-gun-form').addEventListener('submit', function (event) {
+    event.preventDefault(); // Evita que o formulário seja enviado
+
+    // Obtém os valores do formulário
+    const name = document.getElementById('name').value;
+    const type = document.getElementById('type').value;
+    const owner = document.getElementById('owner').value;
+
+    // Envia uma solicitação POST para adicionar uma nova arma
+    fetch('/gun', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: name,
+        type: type,
+        owner: owner
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        alert('Gun added successfully!');
+        // Redireciona para a página de listagem de armas
+        window.location.href = '/';
+      })
+      .catch(error => console.error('Error adding gun:', error));
+  });
+</script>
