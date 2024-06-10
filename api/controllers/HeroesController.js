@@ -19,7 +19,7 @@ module.exports = {
   },
   create: async (req, res) => {
     try {
-      const hero = await Hero.create(req.body).fetch();
+      const hero = await Hero.new(req.body).fetch();
       return res.json(hero);
     } catch (err) {
       return res.serverError(err);
